@@ -1,0 +1,62 @@
+[04-Aug-2025 21:07:52 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\xampp\htdocs\timetable-v2\Dashboard\includes\header.php:26) in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 9
+[04-Aug-2025 21:07:52 Europe/Berlin] Received data: Array
+(
+)
+
+[04-Aug-2025 21:07:52 Europe/Berlin] Schedule: Array
+(
+)
+
+[04-Aug-2025 21:07:52 Europe/Berlin] Academic Year ID: 
+[04-Aug-2025 21:07:52 Europe/Berlin] Semester: 
+[04-Aug-2025 21:07:52 Europe/Berlin] Unexpected output: 
+{"success":true,"available":[{"id":1,"name":"Main Auditorium","type":"Auditorium","campus":"huye","site":"joecedro18","capacity":500},{"id":2,"name":"Science Lab 1","type":"Laboratory","campus":"huye","site":"joecedro18","capacity":30},{"id":3,"name":"Basketball Court","type":"classroom","campus":"huye","site":"batima","capacity":100},{"id":4,"name":"Computer Room 2","type":"Computer Lab","campus":"huye","site":"joecedro18","capacity":40},{"id":5,"name":"Seminar Room A","type":"Classroom","campus":"huye","site":"joecedro18","capacity":25},{"id":6,"name":"Chemistry Lab","type":"Laboratory","campus":"huye","site":"joecedro18","capacity":20},{"id":7,"name":"boo","type":"ty","campus":"N\/A","site":"batima","capacity":44},{"id":8,"name":"Lecture Hall","type":"Room","campus":"huye","site":"batima2","capacity":100},{"id":9,"name":"Projector","type":"Equipment","campus":"huye","site":"batima2","capacity":1}],"message":"Facilities checked successfully","debug":{"query":"SELECT f.*, c.name as campus_name, s.name as site_name \n                        FROM facility f \n                        LEFT JOIN campus c ON f.campus_id = c.id\n                        LEFT JOIN site s ON f.site = s.id","params":[]}}
+[04-Aug-2025 21:07:52 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[04-Aug-2025 21:07:52 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[04-Aug-2025 21:07:52 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[04-Aug-2025 21:07:52 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[04-Aug-2025 21:07:52 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[04-Aug-2025 21:07:52 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[04-Aug-2025 21:07:52 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[04-Aug-2025 21:07:52 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:23 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\xampp\htdocs\timetable-v2\Dashboard\includes\header.php:26) in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 9
+[05-Aug-2025 10:07:23 Europe/Berlin] Received data: Array
+(
+)
+
+[05-Aug-2025 10:07:23 Europe/Berlin] Schedule: Array
+(
+)
+
+[05-Aug-2025 10:07:23 Europe/Berlin] Academic Year ID: 
+[05-Aug-2025 10:07:23 Europe/Berlin] Semester: 
+[05-Aug-2025 10:07:23 Europe/Berlin] Unexpected output: 
+{"success":true,"available":[{"id":1,"name":"Main Auditorium","type":"Auditorium","campus":"huye","site":"joecedro18","capacity":500},{"id":2,"name":"Science Lab 1","type":"Laboratory","campus":"huye","site":"joecedro18","capacity":30},{"id":3,"name":"Basketball Court","type":"classroom","campus":"huye","site":"batima","capacity":100},{"id":4,"name":"Computer Room 2","type":"Computer Lab","campus":"huye","site":"joecedro18","capacity":40},{"id":5,"name":"Seminar Room A","type":"Classroom","campus":"huye","site":"joecedro18","capacity":25},{"id":6,"name":"Chemistry Lab","type":"Laboratory","campus":"huye","site":"joecedro18","capacity":20},{"id":7,"name":"boo","type":"ty","campus":"N\/A","site":"batima","capacity":44},{"id":8,"name":"Lecture Hall","type":"Room","campus":"huye","site":"batima2","capacity":100},{"id":9,"name":"Projector","type":"Equipment","campus":"huye","site":"batima2","capacity":1}],"message":"Facilities checked successfully","debug":{"query":"SELECT f.*, c.name as campus_name, s.name as site_name \n                        FROM facility f \n                        LEFT JOIN campus c ON f.campus_id = c.id\n                        LEFT JOIN site s ON f.site = s.id","params":[]}}
+[05-Aug-2025 10:07:23 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:23 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:23 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:23 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:23 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:23 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:23 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:23 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:55 Europe/Berlin] Received data: Array
+(
+)
+
+[05-Aug-2025 10:07:55 Europe/Berlin] Schedule: Array
+(
+)
+
+[05-Aug-2025 10:07:56 Europe/Berlin] Academic Year ID: 
+[05-Aug-2025 10:07:56 Europe/Berlin] Semester: 
+[05-Aug-2025 10:07:56 Europe/Berlin] Unexpected output: 
+{"success":true,"available":[{"id":1,"name":"Main Auditorium","type":"Auditorium","campus":"huye","site":"joecedro18","capacity":500},{"id":2,"name":"Science Lab 1","type":"Laboratory","campus":"huye","site":"joecedro18","capacity":30},{"id":3,"name":"Basketball Court","type":"classroom","campus":"huye","site":"batima","capacity":100},{"id":4,"name":"Computer Room 2","type":"Computer Lab","campus":"huye","site":"joecedro18","capacity":40},{"id":5,"name":"Seminar Room A","type":"Classroom","campus":"huye","site":"joecedro18","capacity":25},{"id":6,"name":"Chemistry Lab","type":"Laboratory","campus":"huye","site":"joecedro18","capacity":20},{"id":7,"name":"boo","type":"ty","campus":"N\/A","site":"batima","capacity":44},{"id":8,"name":"Lecture Hall","type":"Room","campus":"huye","site":"batima2","capacity":100},{"id":9,"name":"Projector","type":"Equipment","campus":"huye","site":"batima2","capacity":1}],"message":"Facilities checked successfully","debug":{"query":"SELECT f.*, c.name as campus_name, s.name as site_name \n                        FROM facility f \n                        LEFT JOIN campus c ON f.campus_id = c.id\n                        LEFT JOIN site s ON f.site = s.id","params":[]}}
+[05-Aug-2025 10:07:56 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:56 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:56 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:56 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:56 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:56 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:56 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174
+[05-Aug-2025 10:07:56 Europe/Berlin] PHP Warning:  Undefined array key "site_name" in C:\xampp\htdocs\timetable-v2\Dashboard\facility_selector.php on line 174

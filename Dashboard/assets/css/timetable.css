@@ -1,0 +1,662 @@
+/* Timetable Management System Styles */
+
+/* Main container */
+.main-container {
+    padding: 20px;
+    background: #f8f9fa;
+    min-height: calc(100vh - 60px);
+}
+
+/* Page header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.page-header h1 {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.header-icon {
+    margin-right: 15px;
+    color: #3498db;
+    font-size: 2rem;
+}
+
+.date-nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.date-nav button {
+    border-radius: 8px;
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+}
+
+.date-nav button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+#currentDate {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    min-width: 200px;
+    text-align: center;
+}
+
+/* Navigation tabs */
+.nav-tabs {
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-weight: 500;
+    color: #6c757d;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link.active {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+    background: #f8f9fa;
+    color: #3498db;
+}
+
+/* Filters container */
+.filters-container {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.filter-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 25px;
+}
+
+.filter-title i {
+    margin-right: 10px;
+    color: #3498db;
+}
+
+/* Academic period filters */
+.academic-period-filters {
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+/* Step indicator */
+.step-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding: 0 20px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: -50%;
+    width: 100%;
+    height: 2px;
+    background: #ecf0f1;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.step.active:not(:last-child)::after {
+    background: #3498db;
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ecf0f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.step.active .step-icon {
+    background: #3498db;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.step-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #6c757d;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.step.active .step-label {
+    color: #3498db;
+    font-weight: 600;
+}
+
+/* Filter steps */
+.filter-steps {
+    margin-bottom: 25px;
+}
+
+.filter-step {
+    display: none;
+}
+
+.filter-step.active {
+    display: block;
+    animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.filter-group {
+    margin-bottom: 20px;
+}
+
+.filter-group label {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.filter-group label i {
+    margin-right: 8px;
+    color: #3498db;
+}
+
+.filter-group .form-select {
+    border-radius: 8px;
+    border: 2px solid #ecf0f1;
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+}
+
+.filter-group .form-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+/* Action buttons */
+.filter-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding-top: 20px;
+    border-top: 2px solid #ecf0f1;
+}
+
+.filter-actions .btn {
+    border-radius: 8px;
+    padding: 12px 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.filter-actions .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+/* Timetable wrapper */
+.timetable-wrapper {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.timetable-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    min-height: 500px;
+}
+
+.day-column {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    min-height: 500px;
+}
+
+.day-header {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #2c3e50;
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.session-card {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-left: 4px solid #3498db;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.session-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    border-left-color: #2980b9;
+}
+
+.session-time {
+    font-weight: 700;
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.session-module {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.session-lecturer {
+    color: #7f8c8d;
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+}
+
+.session-facility {
+    color: #95a5a6;
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+.no-sessions {
+    text-align: center;
+    color: #bdc3c7;
+    font-style: italic;
+    padding: 40px 20px;
+}
+
+/* Loading state */
+.loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: #7f8c8d;
+}
+
+.loading .spinner-border {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 20px;
+    color: #3498db;
+}
+
+/* Schedule form */
+.schedule-form {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.schedule-form h5 {
+    display: flex;
+    align-items: center;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.schedule-form h5 i {
+    margin-right: 10px;
+    color: #27ae60;
+}
+
+.schedule-container {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.session-entry {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 2px solid #ecf0f1;
+    transition: all 0.3s ease;
+}
+
+.session-entry:hover {
+    border-color: #3498db;
+}
+
+/* Selected groups display */
+.selected-groups {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.selected-groups .badge {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+}
+
+/* Modal styles */
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border-radius: 12px 12px 0 0;
+    padding: 20px 25px;
+}
+
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+.modal-body {
+    padding: 25px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.groups-list,
+.facilities-list,
+.modules-list,
+.lecturers-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.group-item,
+.facility-item,
+.module-item,
+.lecturer-item {
+    padding: 15px;
+    border: 1px solid #ecf0f1;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.group-item:hover,
+.facility-item:hover,
+.module-item:hover,
+.lecturer-item:hover {
+    background: #f8f9fa;
+    border-color: #3498db;
+}
+
+.group-item .form-check-input:checked,
+.facility-item .form-check-input:checked,
+.module-item .form-check-input:checked,
+.lecturer-item .form-check-input:checked {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+/* Slide panel */
+.slide-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    transition: right 0.3s ease;
+    z-index: 1050;
+    display: none;
+}
+
+.slide-panel.open {
+    right: 0;
+    display: block;
+}
+
+.panel-header {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 25px;
+    position: relative;
+}
+
+.panel-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.panel-subtitle {
+    margin: 5px 0 0 0;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+.close-panel {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+}
+
+.close-panel:hover {
+    background: rgba(255,255,255,0.3);
+    color: white;
+}
+
+.panel-content {
+    padding: 25px;
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 1040;
+    display: none;
+}
+
+.overlay.active {
+    display: block;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .timetable-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        padding: 15px;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+    
+    .timetable-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .step-indicator {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .step {
+        flex: 0 0 calc(33.333% - 10px);
+    }
+    
+    .step:not(:last-child)::after {
+        display: none;
+    }
+    
+    .filter-actions {
+        flex-direction: column;
+    }
+    
+    .slide-panel {
+        width: 100%;
+        right: -100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .step {
+        flex: 0 0 calc(50% - 10px);
+    }
+    
+    .filters-container,
+    .schedule-form,
+    .timetable-wrapper {
+        padding: 20px;
+    }
+    
+    .session-entry .row {
+        --bs-gutter-x: 0.5rem;
+    }
+}
+
+/* Form validation styles */
+.is-invalid {
+    border-color: #e74c3c !important;
+}
+
+.is-invalid:focus {
+    border-color: #e74c3c !important;
+    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25) !important;
+}
+
+/* Alert styles */
+.alert {
+    border-radius: 8px;
+    border: none;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #e8f6fd, #d4edfc);
+    color: #2c5282;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fef5e7, #fed7aa);
+    color: #c05621;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #fee, #fecaca);
+    color: #c53030;
+}
+
+/* Utility classes */
+.text-primary {
+    color: #3498db !important;
+}
+
+.bg-primary {
+    background-color: #3498db !important;
+}
+
+.border-primary {
+    border-color: #3498db !important;
+}
+
+/* Animation utilities */
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
