@@ -100,14 +100,18 @@ $schedule_query = "
     SELECT 
         t.id,
         m.name AS subject,
+        m.code AS module_code,
         f.name AS room,
         ts.start_time,
         ts.end_time,
         ts.day,
-        g.name AS group_name
+        ts.date,
+        g.name AS group_name,
+        u.names AS teacher
     FROM timetable t
     INNER JOIN module m ON t.module_id = m.id
     INNER JOIN facility f ON t.facility_id = f.id
+    INNER JOIN users u ON t.leader_lecturer_id = u.id
     INNER JOIN timetable_sessions ts ON ts.timetable_id = t.id
     INNER JOIN timetable_groups tg ON tg.timetable_id = t.id
     INNER JOIN student_group g ON tg.group_id = g.id
@@ -153,7 +157,7 @@ for ($i = 0; $i < 5; $i++) {
 }
 $week_label = $week_dates[0]['date'] . " to " . $week_dates[4]['date'];
 
-// Group schedules by day and time for the selected week (assuming all weeks have same structure)
+// Group schedules by day and time for the selected week
 $schedulesByDayTime = [];
 foreach ($schedules as $s) {
     foreach ($week_dates as $wd) {
@@ -346,7 +350,7 @@ sort($timeSlotsForWeek);
                 
                 <div class="flex items-center space-x-2">
                     <label class="text-sm text-gray-600">Subject:</label>
-                    <select id="subjectFilter" class="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <select id="subjectFilter" onchange="applyFilters()" class="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">All Subjects</option>
                         <?php foreach (array_keys($subjects) as $subject): ?>
                             <option value="<?= htmlspecialchars($subject) ?>"><?= htmlspecialchars($subject) ?></option>
@@ -356,7 +360,7 @@ sort($timeSlotsForWeek);
 
                 <div class="flex items-center space-x-2">
                     <label class="text-sm text-gray-600">Group:</label>
-                    <select id="groupFilter" class="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <select id="groupFilter" onchange="applyFilters()" class="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">All Groups</option>
                         <?php foreach (array_keys($groupsList) as $group): ?>
                             <option value="<?= htmlspecialchars($group) ?>"><?= htmlspecialchars($group) ?></option>
@@ -366,7 +370,7 @@ sort($timeSlotsForWeek);
 
                 <div class="flex items-center space-x-2">
                     <label class="text-sm text-gray-600">Room:</label>
-                    <select id="roomFilter" class="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <select id="roomFilter" onchange="applyFilters()" class="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">All Rooms</option>
                         <?php foreach (array_keys($rooms) as $room): ?>
                             <option value="<?= htmlspecialchars($room) ?>"><?= htmlspecialchars($room) ?></option>
@@ -396,7 +400,316 @@ sort($timeSlotsForWeek);
                             <?php endforeach; ?>
                         </tr>
                     </thead>
-                    <tbody id="timetableBodyWeek"></tbody>
+                    <tbody id="timetableBodyWeek">
+                        <?php foreach ($timeSlotsForWeek as $timeSlot): ?>
+                        <tr class="border-b hover:bg-blue-50 transition">
+                            <td class="px-4 py-3 time-slot align-middle" data-label="Time"><?= htmlspecialchars($timeSlot) ?></td>
+                            <?php foreach ($week_dates as $wd): ?>
+                            <td class="px-4 py-3 align-top" data-label="<?= htmlspecialchars($wd['day']) ?>">
+                                <?php 
+                                $classesForSlot = [];
+                                if (isset($schedulesByDayTime[$timeSlot][$wd['day']])) {
+                                    $classesForSlot = $schedulesByDayTime[$timeSlot][$wd['day']];
+                                }
+                                
+                                foreach ($classesForSlot as $classForSlot): 
+                                ?>
+                                <div class="class-card" onclick="viewClassDetails('<?= $classForSlot['id'] ?>')">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="subject"><?= htmlspecialchars($classForSlot['subject']) ?></span>
+                                        <span class="group-badge"><?= htmlspecialchars($classForSlot['group']) ?></span>
+                                    </div>
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <?php if (isset($_SESSION['success'])): ?>
+    <script>
+        Swal.fire('Success', "<?= addslashes($_SESSION['success']); ?>", 'success');
+    </script>
+    <?php unset($_SESSION['success']); ?>
+<?php endif; ?>
+<?php if (isset($_SESSION['error'])): ?>
+    <script>
+        Swal.fire('Error', "<?= addslashes($_SESSION['error']); ?>", 'error');
+    </script>
+    <?php unset($_SESSION['error']); ?>
+<?php endif; ?>
+
+    <script>
+        // Sample data
+        let schedules = <?php echo json_encode($schedules); ?>;
+        let filteredSchedules = [...schedules];
+
+        // Dynamically get all unique time slots from the data
+        const timeSlots = Array.from(new Set(schedules.map(s => s.time))).sort();
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
+        function applyFilters() {
+            const subjectFilter = document.getElementById('subjectFilter').value;
+            const groupFilter = document.getElementById('groupFilter').value;
+            const roomFilter = document.getElementById('roomFilter').value;
+
+            filteredSchedules = schedules.filter(schedule => {
+                return (!subjectFilter || schedule.subject === subjectFilter) &&
+                       (!groupFilter || schedule.group === groupFilter) &&
+                       (!roomFilter || schedule.room === roomFilter);
+            });
+
+            renderFilteredTimetable();
+        }
+
+        function renderFilteredTimetable() {
+            // Hide all class cards first
+            const allCards = document.querySelectorAll('.class-card');
+            allCards.forEach(card => {
+                card.style.display = 'none';
+            });
+
+            // Show only filtered cards
+            filteredSchedules.forEach(schedule => {
+                const cards = document.querySelectorAll(`[data-schedule-id="${schedule.id}"]`);
+                cards.forEach(card => {
+                    card.style.display = 'block';
+                });
+            });
+        }
+
+        function clearFilters() {
+            document.getElementById('subjectFilter').value = '';
+            document.getElementById('groupFilter').value = '';
+            document.getElementById('roomFilter').value = '';
+            
+            // Show all class cards
+            const allCards = document.querySelectorAll('.class-card');
+            allCards.forEach(card => {
+                card.style.display = 'block';
+            });
+            
+            filteredSchedules = [...schedules];
+        }
+
+        function viewClassDetails(scheduleId) {
+            const schedule = schedules.find(s => s.id === scheduleId);
+            if (!schedule) return;
+
+            document.getElementById('modalContent').innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-book text-blue-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">${schedule.subject}</h4>
+                            <p class="text-sm text-gray-600">Code: ${schedule.module_code || 'N/A'}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <i class="fas fa-users text-gray-500"></i>
+                                <span class="text-sm font-medium text-gray-700">Group</span>
+                            </div>
+                            <p class="text-sm text-gray-900">${schedule.group}</p>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <i class="fas fa-user-tie text-gray-500"></i>
+                                <span class="text-sm font-medium text-gray-700">Teacher</span>
+                            </div>
+                            <p class="text-sm text-gray-900">${schedule.teacher || 'N/A'}</p>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <i class="fas fa-door-open text-gray-500"></i>
+                                <span class="text-sm font-medium text-gray-700">Room</span>
+                            </div>
+                            <p class="text-sm text-gray-900">${schedule.room}</p>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <i class="fas fa-calendar text-gray-500"></i>
+                                <span class="text-sm font-medium text-gray-700">Day</span>
+                            </div>
+                            <p class="text-sm text-gray-900">${schedule.day}</p>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-lg p-3 col-span-2">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <i class="fas fa-clock text-gray-500"></i>
+                                <span class="text-sm font-medium text-gray-700">Time</span>
+                            </div>
+                            <p class="text-sm text-gray-900">${schedule.time}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('viewModal').classList.remove('hidden');
+            document.getElementById('viewModal').classList.add('flex');
+        }
+
+        function closeViewModal() {
+            document.getElementById('viewModal').classList.add('hidden');
+            document.getElementById('viewModal').classList.remove('flex');
+        }
+
+        function openNewScheduleModal() {
+            document.getElementById('newScheduleModal').classList.remove('hidden');
+            document.getElementById('newScheduleModal').classList.add('flex');
+        }
+
+        function closeNewScheduleModal() {
+            document.getElementById('newScheduleModal').classList.add('hidden');
+            document.getElementById('newScheduleModal').classList.remove('flex');
+            document.getElementById('newScheduleForm').reset();
+        }
+
+        function addNewSchedule(event) {
+            event.preventDefault();
+
+            // Collect form data
+            const academic_year_id = document.getElementById('newAcademicYearId').value;
+            const module_id = document.getElementById('newModuleId').value;
+            const lecturer_id = document.getElementById('newLeaderLecturerId').value;
+            const facility_id = document.getElementById('newFacilityId').value;
+            const intake_id = document.getElementById('newIntakeId').value;
+            const program_id = document.getElementById('newProgramId').value;
+            const groupSelect = document.getElementById('newGroupIds');
+            const group_ids = Array.from(groupSelect.selectedOptions).map(opt => opt.value);
+            const day = document.getElementById('newDay').value;
+            const start_time = document.getElementById('newStartTime').value;
+            const end_time = document.getElementById('newEndTime').value;
+
+            // Basic validation
+            if (!academic_year_id || !module_id || !lecturer_id || !facility_id || !start_time || !end_time || !day || group_ids.length === 0) {
+                Swal.fire('Error', 'Please fill all required fields.', 'error');
+                return;
+            }
+            if (start_time >= end_time) {
+                Swal.fire('Error', 'End time must be after start time.', 'error');
+                return;
+            }
+
+            // Prepare data for POST
+            const formData = new FormData();
+            formData.append('academic_year_id', academic_year_id);
+            formData.append('module_id', module_id);
+            formData.append('lecturer_id', lecturer_id);
+            formData.append('facility_id', facility_id);
+            formData.append('intake_id', intake_id);
+            formData.append('program_id', program_id);
+            formData.append('day', day);
+            formData.append('start_time', start_time);
+            formData.append('end_time', end_time);
+            group_ids.forEach(gid => formData.append('group_ids[]', gid));
+
+            // Send AJAX request to backend
+            fetch('save_timetable.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(resp => {
+                console.log('Raw response:', resp);
+                let data;
+                try { 
+                    data = JSON.parse(resp); 
+                } catch (e) { 
+                    console.error('JSON parse error:', e);
+                    console.error('Response was:', resp);
+                    data = null; 
+                }
+                if (data && data.success) {
+                    Swal.fire('Success', data.success, 'success').then(() => {
+                        location.reload();
+                    });
+                } else if (data && data.error) {
+                    console.error('Schedule error:', data.error);
+                    Swal.fire('Error', data.error, 'error');
+                } else {
+                    console.error('Unknown response:', resp);
+                    Swal.fire('Error', 'An error occurred while saving the schedule.', 'error');
+                }
+            })
+            .catch(err => {
+                console.error('AJAX error:', err);
+                Swal.fire('Error', 'Network error occurred.', 'error');
+            });
+        }
+
+        function downloadTimetable() {
+            // Create a simple CSV download of the timetable
+            let csvContent = "Day,Time,Subject,Room,Group\n";
+            
+            schedules.forEach(schedule => {
+                csvContent += `"${schedule.day}","${schedule.time}","${schedule.subject}","${schedule.room}","${schedule.group}"\n`;
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "timetable.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Add data attributes to class cards for filtering
+        document.addEventListener('DOMContentLoaded', function() {
+            const classCards = document.querySelectorAll('.class-card');
+            classCards.forEach(card => {
+                const scheduleId = card.getAttribute('onclick').match(/'([^']+)'/)[1];
+                card.setAttribute('data-schedule-id', scheduleId);
+            });
+        });
+
+        // Close modals when clicking outside
+        document.getElementById('viewModal').addEventListener('click', function(e) {
+            if (e.target === this) closeViewModal();
+        });
+
+        document.getElementById('newScheduleModal').addEventListener('click', function(e) {
+            if (e.target === this) closeNewScheduleModal();
+        });
+
+        // Close modals with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeViewModal();
+                closeNewScheduleModal();
+            }
+        });
+    </script>
+  </main>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
+
+                                    <div class="meta">
+                                        <i class="fas fa-door-open"></i>
+                                        <span><?= htmlspecialchars($classForSlot['room']) ?></span>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                            </td>
+                            <?php endforeach; ?>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -429,7 +742,7 @@ sort($timeSlotsForWeek);
                 </button>
             </div>
             <div class="p-6">
-                <form id="newScheduleForm" action="save_timetable.php" method="POST">
+                <form id="newScheduleForm" onsubmit="addNewSchedule(event)">
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Academic Year</label>
@@ -507,6 +820,17 @@ sort($timeSlotsForWeek);
                                 <?php endforeach; ?>
                             </select>
                             <small class="text-gray-500">Hold Ctrl (Windows) or Cmd (Mac) to select multiple groups.</small>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Day</label>
+                            <select name="day" id="newDay" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Select Day</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                            </select>
                         </div>
                         <div class="flex gap-4">
                             <div class="flex-1">
@@ -586,10 +910,7 @@ sort($timeSlotsForWeek);
                                     <span class="subject">${classForSlot.subject}</span>
                                     <span class="group-badge">${classForSlot.group}</span>
                                 </div>
-                                <div class="meta">
-                                    <i class="fas fa-user-tie"></i>
-                                    <span>${classForSlot.teacher}</span>
-                                </div>
+                                
                                 <div class="meta">
                                     <i class="fas fa-door-open"></i>
                                     <span>${classForSlot.room}</span>
@@ -713,6 +1034,8 @@ sort($timeSlotsForWeek);
             const group_ids = Array.from(groupSelect.selectedOptions).map(opt => opt.value);
             const start_time = document.getElementById('newStartTime').value;
             const end_time = document.getElementById('newEndTime').value;
+            const schedule_date = document.getElementById('newScheduleDate').value;
+            const day = document.getElementById('newDay').value;
 
             // Basic validation
             if (!academic_year_id || !module_id || !lecturer_id || !facility_id || !start_time || !end_time || group_ids.length === 0) {
@@ -735,6 +1058,8 @@ sort($timeSlotsForWeek);
             formData.append('start_time', start_time);
             formData.append('end_time', end_time);
             group_ids.forEach(gid => formData.append('group_ids[]', gid));
+            formData.append('schedule_date', schedule_date);
+            formData.append('day', day);
 
             // Send AJAX request to backend
             fetch('save_timetable.php', {
@@ -785,3 +1110,4 @@ sort($timeSlotsForWeek);
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>
+
